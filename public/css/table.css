@@ -197,9 +197,9 @@ h1 {
   cursor: pointer;
 }
 
-.actions .actions_inner:first-child {
+/* .actions .actions_inner:first-child {
   display: none;
-}
+} */
 
 .actions > div > span {
   cursor: pointer;
