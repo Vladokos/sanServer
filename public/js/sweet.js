@@ -4,7 +4,7 @@ const inCart = document.getElementById("inCart");
 
 
 inCart.addEventListener("click", (e) => {
-    if (!userEmail) window.location.href = "http://127.0.0.1:4000/registration"
+    if (!userEmail) window.location.href = "https://sanserv.onrender.com/registration"
 
     //id & cost
     const data = e.target.name.split('/');

@@ -14,7 +14,7 @@ log?.addEventListener("click", () => {
             if (res.status === 200) {
                 alert("Успешно");
                 localStorage.setItem("user", email.value)
-                window.location.href = "http://127.0.0.1:4000/";
+                window.location.href = "https://sanserv.onrender.com/";
             }
         })
     } else {
@@ -37,7 +37,7 @@ reg?.addEventListener("click", () => {
             if (res.status === 200) {
                 alert("Успешно");
                 localStorage.setItem("user", email.value)
-                window.location.href = "http://127.0.0.1:4000/";
+                window.location.href = "https://sanserv.onrender.com/";
             }
         })
     } else {
