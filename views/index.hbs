@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Кэнди шоп</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    {{> header}}
+
+    <main class="main">
+
+        <div class="main_container">
+
+            <h1 class="main_title" id="offers">КОНДИТЕРСКИЕ ИЗДЕЛИЯ</h1>
+
+            <div class="main_nav">
+
+                <ul class="main_nav-items">
+                    {{#each sweetType}}
+                    <li class="item"><button onclick="getSweet(this,{{this.idSweetType}})">{{this.Title}}</button></li>
+                    {{/each}}
+                </ul>
+
+            </div>
+
+            <div class="main_goods" id="goods">
+
+                
+
+
+            </div>
+
+        </div>
+
+        <section class="advantages">
+
+            <div class="advantages_container">
+
+                <div class="advantages_content">
+
+                    <div class="advantages-top">
+                        <h1 class="advantages_title">«Кэндишоп» предлагает каталог из 94 позиций<br> реализуемых
+                            кондитерских изделий</h1>
+                        <span class="advantages_text">Всю продукцию нашей компании можно приобрести мелкими и оптовыми
+                            партиями. Чтобы подробнее узнать о товарах, а также дать нам более детальное представление о
+                            Ваших пожеланиях – оставьте заявку, консультация бесплатна.</span>
+                    </div>
+
+                    <div class="advantages-bottom">
+
+                        <div class="point">
+                            <h1 class="advantages_title-bottom">3</h1>
+                            <span class="advantages_text-bottom">вида затяжного печенья</span>
+                        </div>
+                        <div class="point">
+                            <h1 class="advantages_title-bottom">6</h1>
+                            <span class="advantages_text-bottom">видов сахарного печенья</span>
+                        </div>
+                        <div class="point">
+                            <h1 class="advantages_title-bottom">3</h1>
+                            <span class="advantages_text-bottom">вида затяжного печенья</span>
+                        </div>
+                        <div class="point">
+                            <h1 class="advantages_title-bottom">11</h1>
+                            <span class="advantages_text-bottom">видов зефира</span>
+                        </div>
+                        <div class="point">
+                            <h1 class="advantages_title-bottom">9</h1>
+                            <span class="advantages_text-bottom">видов пряничной продукции</span>
+                        </div>
+                        <div class="point">
+                            <h1 class="advantages_title-bottom">17</h1>
+                            <span class="advantages_text-bottom">видов вафельной продукции</span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <div class="popup_bg">
+            <form action="#" class="popup">
+
+                <div class="popup_text">
+                    <h1>ОСТАВИТЬ ЗАЯВКУ</h1>
+                    <span>Заполните форму, и мы Вам перезвоним, чтобы обсудить все детали</span>
+                </div>
+                <div class="label_info">
+                    <label for="">
+                        <input type="text" name="e-mail" placeholder="Ваш e-mail" required="required"
+                            class="input_email" id="email">
+                    </label>
+                    <label for="">
+                        <input type="text" name="name" placeholder="Ваше имя" required="required" class="input_name"
+                            id="name">
+                    </label>
+                </div>
+                <div class="popup_btn">
+                    <button type="submit" class="form_btn">Отправить заявку</button>
+                </div>
+
+            </form>
+        </div>
+
+    </main>
+
+    {{> footer}}
+    
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/index.js"></script>
+    <script src="../js/header.js"></script>
+</body>
+
+</html>

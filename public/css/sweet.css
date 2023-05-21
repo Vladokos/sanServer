@@ -1,0 +1,46 @@
+body {
+  font-family: Montserrat;
+}
+
+.container {
+  width: 90%;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+
+.goods {
+  display: flex;
+  flex-direction: column;
+  gap: 70px;
+  align-items: center;
+
+  color: #ba8275;
+
+  font-size: 20px;
+}
+
+.goods img {
+  width: 520px;
+  height: 480px;
+}
+
+.goods_title {
+  font-size: 42px;
+}
+
+.open_popup-button {
+  font-family: Montserrat;
+  margin: 0 60px;
+  letter-spacing: 0.05rem;
+  padding: 18px 40px;
+  color: #ba8275;
+  background: transparent;
+  border: 1px solid #ba8275;
+
+  transition: 0.2s all linear;
+}
+
+.open_popup-button:hover {
+  color: #ececec;
+  background: #ba8275;
+}

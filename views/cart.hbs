@@ -1,0 +1,56 @@
+<script>
+    const email = localStorage.getItem("user");
+    const link = window.location.href.split('/')[4];
+    if (email) {
+        if (email !== link) {
+            window.location.href = "http://127.0.0.1:4000/"
+        }
+    } else {
+        window.location.replace("http://127.0.0.1:4000/")
+    }
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/fonts.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/cart.css">
+</head>
+
+<body>
+    {{> header}}
+    <main>
+        <div class="container">
+            <div class="main__inner">
+                <ul>
+                    {{#each sweet}}
+                    <li>
+                        <img src="{{this.image}}">
+                        <div>
+                            {{this.title}}
+                        </div>
+                        <input type="text" value="{{this.amount}}">
+                        <div>
+                            {{this.cost}} ₽
+                        </div>
+                    </li>
+                    {{/each}}
+                </ul>
+                <button>Купить</button>
+                <button>Удалить</button>
+            </div>
+        </div>
+    </main>
+    {{> footer}}
+    <script src="../js/header.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+body {
+  font-family: Montserrat;
+}
+
+.container {
+  width: 90%;
+  margin: 0 auto;
+  padding: 0 10px;
+}
+.main__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #ba8275;
+}

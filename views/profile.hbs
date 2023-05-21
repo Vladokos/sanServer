@@ -1,0 +1,51 @@
+<script>
+    const prof = localStorage.getItem("user");
+    const linkEmail = window.location.href.split('/')[4];
+    if (prof) {
+        if (prof !== linkEmail) {
+            window.location.href = "http://127.0.0.1:4000/"
+        }
+    } else {
+        window.location.href = "http://127.0.0.1:4000/"
+    }
+</script>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/fonts.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/profile.css">
+</head>
+
+<body>
+    {{> header}}
+
+    <main>
+        <div class="container">
+            <div class="main__inner">
+                {{#each user}}
+                <ul>
+                    <li>Логин:{{this.Name}}</li>
+                    <li>Почта:{{this.Email}}</li>
+                </ul>
+                {{/each}}
+
+                <button id="exit">Выйти</button>
+            </div>
+        </div>
+    </main>
+
+    {{> footer}}
+    <script src="../js/profile.js"></script>
+    <script src="../js/header.js"></script>
+</body>
+
+</html>

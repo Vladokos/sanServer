@@ -4,17 +4,34 @@ const saveButton = document.getElementById("save");
 const changeButton = document.getElementById("change");
 const deleteButton = document.getElementById("delete");
 
+let imageFromClicked = "";
+
+function isNumberKey(evt) {
+    var charCode = (evt.which) ? evt.which : evt.keyCode
+    if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
+    return true;
+}
+
 const clickedElement = (e, columns) => {
-    const data = e.innerText.split("\n");
     const fields = columns.split(',');
+    // console.log(fields);
+    // const data = [];//['id','img','title','desc']
+    // console.log(e.children);
+
 
     for (let i = 0; i < fields.length; i++) {
         if (fields[i] === "Image") {
-            document.getElementById(fields[i]).files[0] = data[i];
+            // console.log(e.children[i].firstChild.src);'
+            imageFromClicked = e.children[i].firstChild.src
+            // document.getElementById(fields[i]).files[0] = e.children[i].firstChild.src;
         } else {
-            document.getElementById(fields[i]).value = data[i];
-        }
+            // console.log(e.children[i].innerText);
 
+            const input = document.getElementById(fields[i]);
+
+            input.value = e.children[i].innerText;
+        }
     }
 }
 
@@ -28,6 +45,7 @@ saveButton.addEventListener("click", async (e) => {
 
     for (let i = 0; i < columnsName.length; i++) {
         if (columnsName[i] === "Image") {
+
             const file = document.getElementById(columnsName[i]).files[0];
 
             const getBase64 = (file) =>
@@ -39,7 +57,12 @@ saveButton.addEventListener("click", async (e) => {
 
             let base64;
 
-            base64 = await getBase64(file);
+            if (file) {
+                base64 = await getBase64(file);
+            } else {
+                base64 = imageFromClicked;
+            }
+
 
             data.push(base64.substring(22));
         } else {
@@ -55,10 +78,14 @@ saveButton.addEventListener("click", async (e) => {
             alert("Успешно");
             window.location.reload();
         }
+    }).catch((err) => {
+        if(err.response.status === 304){
+            alert("Заполните все поля корректно")
+        }
     })
 })
 
-changeButton.addEventListener("click", (e) => {
+changeButton.addEventListener("click", async (e) => {
     const tableName = e.target.name.split("/")[0];
     const primaryKey = e.target.name.split("/")[1];
     const columnsName = columns.innerText.split("\n");
@@ -70,7 +97,25 @@ changeButton.addEventListener("click", (e) => {
 
     for (let i = 0; i < columnsName.length; i++) {
         if (columnsName[i] === "Image") {
+            const file = document.getElementById(columnsName[i]).files[0];
 
+            console.log(file);
+            const getBase64 = (file) =>
+                new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.readAsDataURL(file);
+                    reader.onload = () => resolve(reader.result);
+                });
+
+            let base64;
+
+            if (file) {
+                base64 = await getBase64(file);
+            } else {
+                base64 = imageFromClicked;
+            }
+
+            data.push(base64.substring(22));
         } else {
             const value = document.getElementById(columnsName[i]).value;
             if (value.length > 0) {
@@ -112,6 +157,10 @@ deleteButton.addEventListener("click", (e) => {
             if (res.status === 200) {
                 alert("Успешно");
                 window.location.reload();
+            }
+        }).catch(err => {
+            if (err.response.status === 304) {
+                alert("Данная запись используется в другой таблице, удаление невозможно")
             }
         })
     } else {

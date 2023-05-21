@@ -1,0 +1,19 @@
+li {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 30px;
+
+  color: #ba8275;
+}
+img {
+  width: 200px;
+  height: 200px;
+}
+
+.main__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

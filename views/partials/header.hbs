@@ -1,0 +1,56 @@
+<script>
+    let user = localStorage.getItem("user");
+</script>
+
+<header class="header">
+
+    <div class="header_container">
+
+        <div class="header_menu" id="menu">
+
+            <nav class="menu_nav">
+                <ul class="nav_items">
+                    <li>
+                        <a href="../#offers" class="js-clicked">Кондитерские изделия</a>
+                    </li>
+                    <li>
+                        <a href="../#contacts" class="js-clicked">Контакты</a>
+                    </li>
+                    <li>
+                        <img src="../images/cart.svg" alt="корзина" class="item-link" onclick="openCart()"></img>
+                    </li>
+                    <li>
+                        <img src="../images/account.svg" alt="профиль" class="item-link" onclick="openProfile()"></img>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+
+        <a href="../" class="logo">Кэнди шоп</a>
+
+        <div class="header_content">
+
+            <nav class="navigation">
+                <ul class="navigation_items">
+                    <li><a href="../#offers" class="item-link">Кондитерские изделия</a></li>
+                    <li><a href="../#contacts" class="item-link">Контакты</a></li>
+                    <li><img src="../images/cart.svg" onclick="openCart(user)" alt="корзина" class="item-link"></img></li>
+                    <li><img src="../images/account.svg" onclick="openProfile(user)" alt="профиль" class="item-link"></img></li>
+                </ul>
+            </nav>
+
+
+            <div class="burger" id="burger">
+                <div class="burger_line burger_line-first"></div>
+                <div class="burger_line burger_line-second"></div>
+                <div class="burger_line burger_line-third"></div>
+                <div class="burger_line burger_line-fourth"></div>
+            </div>
+
+        </div>
+
+
+    </div>
+
+</header>

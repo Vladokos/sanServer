@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/fonts.css">
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/sweet.css">
+</head>
+
+<body>
+    {{> header}}
+    <main>
+        <div class="container">
+            <div class="main__inner">
+                {{#each sweet}}
+                <div class="goods">
+                    <img src="{{this.Image}}" alt="" class="goods_image">
+                    <span class="goods_title">{{this.Title}}</span>
+                    <span>{{this.Description}}</span>
+                    <span class="goods_info">1кг = {{this.Cost}}₽</span>
+                    <button class="open_popup-button" id="inCart" name="{{this.idSweet}}/{{this.Cost}}">В
+                        корзину</button>
+                </div>
+                {{/each}}
+            </div>
+        </div>
+    </main>
+    {{> footer}}
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="../js/main.js"></script>
+    <script src="../js/sweet.js"></script>
+    <script src="../js/header.js"></script>
+
+</body>
+
+</html>
