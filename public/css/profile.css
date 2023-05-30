@@ -13,3 +13,34 @@ body {
   align-items: center;
   color: #ba8275;
 }
+
+.popup{
+  visibility: hidden;
+}
+
+.popup.active{
+  visibility: visible;
+  
+
+
+  z-index: 2;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  background-color: rgba(0, 0, 0, 0.5);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup__inner {
+  background-color: #fff;
+  width: fit-content;
+  margin: 0 auto;
+}

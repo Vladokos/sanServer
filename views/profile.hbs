@@ -37,13 +37,34 @@
                     <li>Почта:{{this.Email}}</li>
                 </ul>
                 {{/each}}
-
+                <button id="listOrders" onclick="document.getElementsByClassName('popup')[0].classList.add('active');">список заказов</button>
                 <button id="exit">Выйти</button>
             </div>
         </div>
     </main>
 
     {{> footer}}
+
+    <div class="popup">
+        <div class="container">
+            <div class="popup__inner">
+                <ul>
+                    {{#each orders}}
+                    <li>
+                        <img src="{{this.image}}" width="150px">
+                        <span style="color:#ba8275">{{this.title}}</span>
+                        <span style="color:#ba8275">{{this.cost}} рублей</span>
+                    </li>
+                    {{/each}}
+                    <li>
+                        <span style="color:#ba8275">Итоговая цена: {{totalCost}} рублей</span>
+                    </li>
+                </ul>
+                <button onclick="document.getElementsByClassName('popup')[0].classList.remove('active');">закрыть</button>
+            </div>
+        </div>
+    </div>
+
     <script src="../js/profile.js"></script>
     <script src="../js/header.js"></script>
 </body>

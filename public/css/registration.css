@@ -1,0 +1,105 @@
+::-webkit-input-placeholder {
+  color:    #ba8275;
+}
+:-moz-placeholder {
+ color:    #ba8275;
+ opacity:  1;
+}
+::-moz-placeholder {
+ color:    #ba8275;
+ opacity:  1;
+}
+:-ms-input-placeholder {
+ color:    #ba8275;
+}
+::-ms-input-placeholder {
+ color:    #ba8275;
+}
+
+::placeholder {
+ color:    #ba8275;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  background: #ba8275;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+  font-family: Montserrat;
+
+}
+
+.form {
+  padding: 80px;
+  background: #ececec;
+  -webkit-box-shadow: 0px 0px 16px 0px rgba(27, 27, 27, 0.2);
+  -moz-box-shadow: 0px 0px 16px 0px rgba(27, 27, 27, 0.2);
+  box-shadow: 0px 0px 16px 0px rgba(27, 27, 27, 0.2);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.form input {
+  color: #ba8275;
+  background: transparent;
+  border: 1px solid transparent;
+  outline: none;
+  padding: 12px 80px 12px 30px;
+  font-size: calc(13px + 4 * (100vw / 1728));
+  line-height: 18px;
+
+  transition: .2s all linear;
+
+  font-family: Montserrat;
+
+}
+
+.form input:focus {
+  border-bottom: 1px solid #ba8275;
+}
+
+.form a {
+  margin-bottom: 40px;
+  text-align: right;
+  text-decoration: none;
+  color: #ba8275;
+
+  transition: .2s all linear;
+}
+
+.form a:hover {
+  text-decoration: underline;
+}
+
+.form button {
+  border: none;
+  outline: none;
+  padding: 16px 0;
+  background: #ba8275;
+  color: #ececec;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+
+  transition: .2s all linear;
+}
+
+.form button:hover {
+  background: transparent;
+  color: #ba8275;
+}

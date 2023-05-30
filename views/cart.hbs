@@ -27,30 +27,43 @@
 
 <body>
     {{> header}}
-    <main>
-        <div class="container">
-            <div class="main__inner">
-                <ul>
-                    {{#each sweet}}
-                    <li>
-                        <img src="{{this.image}}">
-                        <div>
-                            {{this.title}}
-                        </div>
-                        <input type="text" value="{{this.amount}}">
-                        <div>
-                            {{this.cost}} ₽
-                        </div>
-                    </li>
-                    {{/each}}
-                </ul>
-                <button>Купить</button>
-                <button>Удалить</button>
+    <main class="main">
+        <div class="main_container">
+
+
+            {{#each sweet}}
+            <div class="main_request">
+                <div class="request-left">
+                    <img src="{{this.image}}">
+                </div>
+                <div class="request-middle">
+                    <span> {{this.title}}</span>
+                    <span>{{this.cost}} ₽</span>
+                    <span>{{this.amount}} кг</span>
+                </div>
+                <div class="request-right">
+                    <button onclick="removeProduct('{{this.idCart}}')">Убрать</button>
+                </div>
             </div>
+            {{/each}}
+            {{#if sweet}}
+            <div class="request-middle">
+                <span id="totalPrice" class="{{totalCost}}">Итоговая цена: {{totalCost}} рублей</span>
+            </div>
+
+            <div class="request-right">
+                <button onclick="ordering()">Заказать</button>
+            </div>
+            {{/if}}
+
+
         </div>
     </main>
     {{> footer}}
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="../js/header.js"></script>
+    <script src="../js/cart.js"></script>
 </body>
 
 </html>

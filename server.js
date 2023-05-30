@@ -47,6 +47,9 @@ hbs.registerHelper("ifEquals", (arg1, arg2, options) => {
     return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
 })
 
+hbs.registerHelper("ifMore", (arg1, arg2, options) => {
+    return (arg1 > arg2) ? options.fn(this) : options.inverse(this);
+})
 
 app.get("/", async (req, res) => {
     try {
@@ -150,7 +153,7 @@ app.post("/addToCart", async (req, res) => {
     }
 })
 
-app.get("/cart/", async (req,res) => {
+app.get("/cart/", async (req, res) => {
     res.redirect("/login");
 })
 
@@ -164,12 +167,13 @@ app.get("/cart/:email", async (req, res) => {
         const [cart] = await promisePool.execute("SELECT * FROM `Cart` WHERE idUser = ?", [idUsers]);
 
         const returnObject = []
-
+        let totalCost = 0;
         for (let i = 0; i < cart.length; i++) {
             const [sweet] = await promisePool.execute("SELECT * FROM `Sweet` WHERE idSweet = ?", [cart[i].idSweet]);
             sweet[0].Image = "data:image/png;base64," + Buffer.from(sweet[0].Image).toString("base64");
 
             const obj = {
+                idCart: cart[i].idCart,
                 image: sweet[0].Image,
                 title: sweet[0].Title,
                 amount: cart[i].Amount,
@@ -178,10 +182,12 @@ app.get("/cart/:email", async (req, res) => {
 
             returnObject.push(obj);
 
+            totalCost += cart[i].Cost;
         }
 
         res.render("cart.hbs", {
-            sweet: returnObject
+            sweet: returnObject,
+            totalCost
         })
 
     } catch (error) {
@@ -189,17 +195,68 @@ app.get("/cart/:email", async (req, res) => {
     }
 })
 
-app.get("/profile/:email", async (req,res) => {
+app.post("/removeCart", async (req, res) => {
+    try {
+        const { email, idProduct } = req.body;
+
+        const [cart] = await promisePool.execute("DELETE FROM `Cart` WHERE `idCart` = ?", [idProduct]);
+
+        res.sendStatus(200);
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+app.post("/remove", async (req, res) => {
+    try {
+        const { email, totalCost } = req.body;
+
+        const [user] = await promisePool.execute("SELECT * FROM `Users` WHERE Email = ?", [email]);
+        const [cart] = await promisePool.execute("SELECT * FROM `Cart` WHERE `idUser` = ?", [user[0].idUsers]);
+
+        for (let i = 0; i < cart.length; i++) {
+            
+            await promisePool.execute("INSERT INTO `Order` (`idSweet`, `idUser`, `price`) VALUES (?, ?, ?)", [cart[i].idSweet, cart[i].idUser, cart[i].Cost]);
+
+        }
+        await promisePool.execute("DELETE FROM `Cart` WHERE `idUser` = ?", [user[0].idUsers]);
+
+        res.sendStatus(200);
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+app.get("/profile/:email", async (req, res) => {
     try {
         const { email } = req.params;
 
         const [user] = await promisePool.execute("SELECT * FROM `Users` WHERE Email = ?", [email]);
-        
+        const [order] = await promisePool.execute("SELECT * FROM `Order` WHERE `idUser` = ?", [user[0].idUsers]);
+
+        const orders = [];
+        let totalCost =0;
+        for (let i = 0; i < order.length; i++) {
+            
+            const [sweet] = await promisePool.execute("SELECT * FROM `Sweet` WHERE idSweet = ?", [order[i].idSweet]);
+            sweet[0].Image = "data:image/png;base64," + Buffer.from(sweet[0].Image).toString("base64");
+
+            orders.push({
+                image: sweet[0].Image,
+                title: sweet[0].Title,
+                cost: sweet[0].Cost
+            })
+
+            totalCost += sweet[0].Cost;
+        }
+
         res.render("profile.hbs", {
-            user
+            user,
+            orders,
+            totalCost
         })
     } catch (error) {
-        
+
     }
 })
 
