@@ -64,7 +64,9 @@ hbs.registerHelper("search", (arg1, arg2, options) => {
 app.get("/", async (req, res) => {
     try {
         const [sweetType] = await promisePool.execute("SELECT * FROM `SweetType`");
-
+        // const [types] = await promisePool.execute("SELECT SweetType.Title, COUNT(Sweet.idSweet) as Amount FROM Sweet inner join SweetType ON SweetType.idSweetType = Sweet.TypeSweet group by SweetType.idSweetType");
+       
+        
         res.render("index", {
             sweetType
         })
