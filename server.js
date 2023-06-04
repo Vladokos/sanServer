@@ -44,11 +44,21 @@ const promisePool = pool.promise();
 
 
 hbs.registerHelper("ifEquals", (arg1, arg2, options) => {
+    if (arg2 === "primaryKey") {
+        return (arg1 === options.data.root.primaryKey) ? options.fn(this) : options.inverse(this);
+    }
     return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
 })
 
 hbs.registerHelper("ifMore", (arg1, arg2, options) => {
     return (arg1 > arg2) ? options.fn(this) : options.inverse(this);
+})
+
+//look inside object and get keys from it
+//return like keyValue1,keyValue2
+hbs.registerHelper("search", (arg1, arg2, options) => {
+    // console.log(Object.keys(arg1).join(","));
+    return Object.keys(arg1)
 })
 
 app.get("/", async (req, res) => {
@@ -215,7 +225,7 @@ app.post("/remove", async (req, res) => {
         const [cart] = await promisePool.execute("SELECT * FROM `Cart` WHERE `idUser` = ?", [user[0].idUsers]);
 
         for (let i = 0; i < cart.length; i++) {
-            
+
             await promisePool.execute("INSERT INTO `Order` (`idSweet`, `idUser`, `totalCost`) VALUES (?, ?, ?)", [cart[i].idSweet, cart[i].idUser, cart[i].Cost]);
 
         }
@@ -235,9 +245,9 @@ app.get("/profile/:email", async (req, res) => {
         const [order] = await promisePool.execute("SELECT * FROM `Order` WHERE `idUser` = ?", [user[0].idUsers]);
 
         const orders = [];
-        let totalCost =0;
+        let totalCost = 0;
         for (let i = 0; i < order.length; i++) {
-            
+
             const [sweet] = await promisePool.execute("SELECT * FROM `Sweet` WHERE idSweet = ?", [order[i].idSweet]);
             sweet[0].Image = "data:image/png;base64," + Buffer.from(sweet[0].Image).toString("base64");
 
@@ -262,23 +272,73 @@ app.get("/profile/:email", async (req, res) => {
 
 // template
 
+const translateTableName = {
+    'Cart': 'Корзина',
+    'Order': 'Заказы',
+    'Sweet': 'Изделия',
+    'SweetType': 'Тип изделия',
+    'Users': 'Пользователи'
+}
 app.get("/tablesName", async (req, res) => {
     try {
         const [names] = await promisePool.execute("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_SCHEMA = 'bqmhnaqsxnyqxujbcp0o'");
 
+
+        for (let i = 0; i < names.length; i++) {
+
+            names[i].TABLE_NAME = translateTableName[names[i].TABLE_NAME];
+        }
+
+
         res.render("admin.hbs", {
-            names
+            names: translateTableName,
         });
     } catch (error) {
 
     }
 });
 
+
+const usersTranslate = {
+    "Почта": "Email",
+    "Номер пользователя": "idUsers",
+    "Логин": "Name",
+    "Пароль": "Password"
+}
+
+const sweetTypeTranslate = {
+    "Номер типа изделия": "idSweetType",
+    "Название": "Title"
+}
+
+const sweetTranslate = {
+    "Номер изделия": "idSweet",
+    "Тип изделия": "TypeSweet",
+    "Изображение": "Image",
+    "Название": "Title",
+    "Описание": "Description",
+    "Цена": "Cost"
+}
+
+const orderTranslate = {
+    "Номер заказа": "idOrder",
+    "Номер изделия": "idSweet",
+    "Номер пользователя": "idUser",
+    "Цена": "totalCost"
+}
+
+const cartTranslate = {
+    "Номер корзины": "idCart",
+    "Номер изделия": "idSweet",
+    "Номер пользователя": "idUser",
+    "Цена": "Cost",
+    "Кол-во": "Amount"
+}
 app.get("/tableColumns/:name", async (req, res) => {
     try {
         const { name } = req.params;
 
-        const [columns] = await promisePool.execute("SELECT COLUMN_NAME, COLUMN_KEY, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ?", [name]);
+        let [columns] = await promisePool.execute("SELECT COLUMN_NAME, COLUMN_KEY, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = ?", [name]);
 
         const [data] = await promisePool.execute("SELECT * FROM `" + name + "`");
 
@@ -289,11 +349,47 @@ app.get("/tableColumns/:name", async (req, res) => {
             }
         }
 
-        // console.log(columns);
 
-        const colum = columns.map((column) => column.COLUMN_NAME);
+
+        let colum = columns.map((column) => column.COLUMN_NAME);
+
+        switch (name) {
+            case "Users":
+                colum = usersTranslate;
+                for (let i = 0; i < columns.length; i++) {
+                    columns[i].COLUMN_NAME = Object.keys(usersTranslate).find(key => usersTranslate[key] === columns[i].COLUMN_NAME);
+                }
+                break;
+            case "SweetType":
+                colum = sweetTypeTranslate;
+                for (let i = 0; i < columns.length; i++) {
+                    columns[i].COLUMN_NAME = Object.keys(sweetTypeTranslate).find(key => sweetTypeTranslate[key] === columns[i].COLUMN_NAME);
+                }
+                break;
+            case "Sweet":
+                colum = sweetTranslate;
+                for (let i = 0; i < columns.length; i++) {
+                    columns[i].COLUMN_NAME = Object.keys(sweetTranslate).find(key => sweetTranslate[key] === columns[i].COLUMN_NAME);
+                }
+                break;
+            case "Order":
+                colum = orderTranslate;
+                for (let i = 0; i < columns.length; i++) {
+                    columns[i].COLUMN_NAME = Object.keys(orderTranslate).find(key => orderTranslate[key] === columns[i].COLUMN_NAME);
+                }
+                break;
+            case "Cart":
+                colum = cartTranslate;
+                for (let i = 0; i < columns.length; i++) {
+                    columns[i].COLUMN_NAME = Object.keys(cartTranslate).find(key => cartTranslate[key] === columns[i].COLUMN_NAME);
+                }
+                break;
+            default:
+                break;
+        }
+
         const primaryKey = columns.find((colum) => { if (colum.COLUMN_KEY === 'PRI') { return colum } }).COLUMN_NAME
-
+        // console.log(colum);
         res.render("table.hbs", {
             columns: colum,
             columnsDataType: columns,
@@ -311,6 +407,44 @@ app.post("/tableAdd/:name", async (req, res) => {
         const { name } = req.params;
 
         let { data, columnsName } = req.body;
+
+        switch (name) {
+            case "Users":
+                for (let i = 0; i < columnsName.length; i++) {
+
+                    columnsName[i] = usersTranslate[columnsName[i]];
+                }
+                break;
+            case "SweetType":
+                for (let i = 0; i < columnsName.length; i++) {
+
+                    columnsName[i] = sweetTypeTranslate[columnsName[i]];
+                }
+                break;
+            case "Sweet":
+                for (let i = 0; i < columnsName.length; i++) {
+
+                    columnsName[i] = sweetTranslate[columnsName[i]];
+                }
+                break;
+            case "Order":
+                for (let i = 0; i < columnsName.length; i++) {
+
+                    columnsName[i] = orderTranslate[columnsName[i]];
+                }
+                break;
+            case "Cart":
+                for (let i = 0; i < columnsName.length; i++) {
+
+                    columnsName[i] = cartTranslate[columnsName[i]];
+                }
+                break;
+            default:
+                break;
+        }
+
+
+
 
         columnsName = columnsName.map((name) => "`" + name + "`");
         data = data.map((value) => `'${value}'`);
@@ -367,8 +501,52 @@ app.post("/tableAdd/:name", async (req, res) => {
 app.post("/tableChangeData/:name", async (req, res) => {
     try {
         const { name } = req.params;
-
+        //field is primary key
         let { columnsName, data, field, id } = req.body;
+
+        switch (name) {
+            case "Users":
+                field = usersTranslate[field];
+                for (let i = 0; i < columnsName.length; i++) {
+
+                    columnsName[i] = usersTranslate[columnsName[i]];
+                }
+                break;
+            case "SweetType":
+                field = sweetTypeTranslate[field];
+
+                for (let i = 0; i < columnsName.length; i++) {
+
+                    columnsName[i] = sweetTypeTranslate[columnsName[i]];
+                }
+                break;
+            case "Sweet":
+                field = sweetTranslate[field];
+
+                for (let i = 0; i < columnsName.length; i++) {
+
+                    columnsName[i] = sweetTranslate[columnsName[i]];
+                }
+                break;
+            case "Order":
+                field = orderTranslate[field];
+
+                for (let i = 0; i < columnsName.length; i++) {
+
+                    columnsName[i] = orderTranslate[columnsName[i]];
+                }
+                break;
+            case "Cart":
+                field = cartTranslate[field];
+
+                for (let i = 0; i < columnsName.length; i++) {
+
+                    columnsName[i] = cartTranslate[columnsName[i]];
+                }
+                break;
+            default:
+                break;
+        }
 
         columnsName = columnsName.map((name) => "`" + name + "`");
         data = data.map((value) => `'${value}'`);
@@ -397,7 +575,7 @@ app.post("/tableChangeData/:name", async (req, res) => {
 
         const query =
             "UPDATE `" +
-            name +"`" +
+            name + "`" +
             set +
             " WHERE " +
             "`" +
@@ -426,8 +604,30 @@ app.post("/tableChangeData/:name", async (req, res) => {
 app.post("/tableDeleteData/:name", async (req, res) => {
     try {
         const { name } = req.params;
+        //field is primary key
+        let { field, id } = req.body;
 
-        const { field, id } = req.body;
+        switch (name) {
+            case "Users":
+                field = usersTranslate[field];
+
+                break;
+            case "SweetType":
+                field = sweetTypeTranslate[field];
+
+                break;
+            case "Sweet":
+                field = sweetTranslate[field];
+                break;
+            case "Order":
+                field = orderTranslate[field];
+                break;
+            case "Cart":
+                field = cartTranslate[field];
+                break;
+            default:
+                break;
+        }
 
         const query =
             "DELETE FROM `" +
