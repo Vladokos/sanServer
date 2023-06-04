@@ -149,7 +149,7 @@ app.post("/addToCart", async (req, res) => {
 
         res.sendStatus(200);
     } catch (error) {
-
+        console.log(error);
     }
 })
 
@@ -216,7 +216,7 @@ app.post("/remove", async (req, res) => {
 
         for (let i = 0; i < cart.length; i++) {
             
-            await promisePool.execute("INSERT INTO `Order` (`idSweet`, `idUser`, `price`) VALUES (?, ?, ?)", [cart[i].idSweet, cart[i].idUser, cart[i].Cost]);
+            await promisePool.execute("INSERT INTO `Order` (`idSweet`, `idUser`, `totalCost`) VALUES (?, ?, ?)", [cart[i].idSweet, cart[i].idUser, cart[i].Cost]);
 
         }
         await promisePool.execute("DELETE FROM `Cart` WHERE `idUser` = ?", [user[0].idUsers]);
