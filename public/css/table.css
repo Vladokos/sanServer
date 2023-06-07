@@ -62,7 +62,7 @@ h1 {
   display: grid;
   align-items: center;
   text-align: center;
-  grid-template-columns: repeat(6, 150px);
+  grid-template-columns: repeat(7, 150px);
   margin: 10px 0;
 
   border: 2px solid transparent;
@@ -203,4 +203,28 @@ h1 {
 
 .actions > div > span {
   cursor: pointer;
+}
+
+.form {
+  border: none;
+  outline: none;
+  padding: 16px 20px;
+  background: #ba8275;
+  color: #ececec;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+
+  position: absolute;
+  left: 0;
+  top: 0;
+
+  text-decoration: inherit;
+
+  transition: 0.2s all linear;
+}
+
+.form:hover {
+  background: transparent;
+  color: #ececec;
 }

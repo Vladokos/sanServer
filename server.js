@@ -61,12 +61,16 @@ hbs.registerHelper("search", (arg1, arg2, options) => {
     return Object.keys(arg1)
 })
 
+hbs.registerHelper("multiplyNumbers", function (thing1, thing2) {
+    return thing1 * thing2;
+});
+
 app.get("/", async (req, res) => {
     try {
         const [sweetType] = await promisePool.execute("SELECT * FROM `SweetType`");
         // const [types] = await promisePool.execute("SELECT SweetType.Title, COUNT(Sweet.idSweet) as Amount FROM Sweet inner join SweetType ON SweetType.idSweetType = Sweet.TypeSweet group by SweetType.idSweetType");
-       
-        
+
+
         res.render("index", {
             sweetType
         })
@@ -157,7 +161,28 @@ app.post("/addToCart", async (req, res) => {
         const [user] = await promisePool.execute("SELECT * FROM `Users` WHERE Email = ?", [email]);
         const { idUsers } = user[0];
 
-        const [cart] = await promisePool.execute("INSERT INTO `Cart` (`idSweet`, `idUser`, `Cost`, `Amount`) VALUES (?,?,?,?)", [idSweet, idUsers, cost, 1]);
+        const [alreadyInCart] = await promisePool.execute("SELECT * FROM `Cart` WHERE idSweet = ?", [idSweet]);
+        if (alreadyInCart.length > 0) {
+            const amount = ++alreadyInCart[0].Amount;
+
+            await promisePool.execute("UPDATE `Cart` SET Amount = ? WHERE idCart = ?", [amount, alreadyInCart[0].idCart])
+
+        } else {
+            const [cart] = await promisePool.execute("INSERT INTO `Cart` (`idSweet`, `idUser`, `Cost`, `Amount`) VALUES (?,?,?,?)", [idSweet, idUsers, cost, 1]);
+        }
+
+
+        res.sendStatus(200);
+    } catch (error) {
+        console.log(error);
+    }
+})
+app.post("/cart/changeAmount", async (req, res) => {
+    try {
+        const { idCart, amount } = req.body;
+
+        await promisePool.execute("UPDATE `Cart` SET Amount = ? WHERE idCart = ?", [amount, idCart])
+
 
         res.sendStatus(200);
     } catch (error) {
@@ -194,7 +219,7 @@ app.get("/cart/:email", async (req, res) => {
 
             returnObject.push(obj);
 
-            totalCost += cart[i].Cost;
+            totalCost += (cart[i].Cost * cart[i].Amount);
         }
 
         res.render("cart.hbs", {
@@ -228,7 +253,7 @@ app.post("/remove", async (req, res) => {
 
         for (let i = 0; i < cart.length; i++) {
 
-            await promisePool.execute("INSERT INTO `Order` (`idSweet`, `idUser`, `totalCost`) VALUES (?, ?, ?)", [cart[i].idSweet, cart[i].idUser, cart[i].Cost]);
+            await promisePool.execute("INSERT INTO `Order` (`idSweet`, `idUser`, `totalCost`) VALUES (?, ?, ?)", [cart[i].idSweet, cart[i].idUser, totalCost]);
 
         }
         await promisePool.execute("DELETE FROM `Cart` WHERE `idUser` = ?", [user[0].idUsers]);
@@ -256,10 +281,10 @@ app.get("/profile/:email", async (req, res) => {
             orders.push({
                 image: sweet[0].Image,
                 title: sweet[0].Title,
-                cost: sweet[0].Cost
+                cost: order[i].totalCost
             })
 
-            totalCost += sweet[0].Cost;
+            totalCost += order[i].totalCost;
         }
 
         res.render("profile.hbs", {
@@ -319,7 +344,8 @@ const sweetTranslate = {
     "Изображение": "Image",
     "Название": "Title",
     "Описание": "Description",
-    "Цена": "Cost"
+    "Цена": "Cost",
+    "Вес": "heft"
 }
 
 const orderTranslate = {

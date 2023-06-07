@@ -27,7 +27,13 @@ body {
 .goods_title {
   font-size: 42px;
 }
-
+.main__inner{
+  padding-top: 40px;
+}
+.open_popup-link{
+  cursor: pointer;
+}
+.open_popup-link,
 .open_popup-button {
   font-family: Montserrat;
   margin: 0 60px;
@@ -39,7 +45,7 @@ body {
 
   transition: 0.2s all linear;
 }
-
+.open_popup-link:hover,
 .open_popup-button:hover {
   color: #ececec;
   background: #ba8275;

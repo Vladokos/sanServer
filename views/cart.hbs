@@ -20,9 +20,13 @@
     <title>Document</title>
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/fonts.css">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../css/header.css">
     <link rel="stylesheet" href="../css/footer.css">
     <link rel="stylesheet" href="../css/cart.css">
+
+
 </head>
 
 <body>
@@ -38,8 +42,29 @@
                 </div>
                 <div class="request-middle">
                     <span> {{this.title}}</span>
-                    <span>{{this.cost}} ₽</span>
-                    <span>{{this.amount}} кг</span>
+                    <span id="{{this.idCart}}">{{multiplyNumbers this.cost this.amount}} ₽</span>
+                    <div>
+
+                        <div class="input-group inline-group">
+                            <div class="input-group-prepend">
+                                <button class="btn btn-outline-secondary btn-minus"  onclick="decrease('{{this.title}}', '{{this.idCart}}', '{{this.cost}}')">
+                                    <i class="fa fa-minus"></i>
+                                </button>
+                            </div>
+                            <input class="form-control quantity" id="{{this.title}}" min="1" name="quantity"
+                                style="width:50%"   
+                                value="{{this.amount}}"
+                                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '');" readonly>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary btn-plus"
+                                    onclick="increase('{{this.title}}', '{{this.idCart}}', '{{this.cost}}')">
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </div>
+                     
+                    </div>
+
                 </div>
                 <div class="request-right">
                     <button onclick="removeProduct('{{this.idCart}}')">Убрать</button>
@@ -48,7 +73,7 @@
             {{/each}}
             {{#if sweet}}
             <div class="request-middle">
-                <span id="totalPrice" class="{{totalCost}}">Итоговая цена: {{totalCost}} рублей</span>
+                <span id="totalPrice">Итоговая цена: {{totalCost}} рублей</span>
             </div>
 
             <div class="request-right">

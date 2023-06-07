@@ -332,6 +332,55 @@ button {
   color: #f887fa;
 }
 
+.input-group {
+  width: 70%;
+  margin: 0 auto;
+}
+.form-control:disabled,
+.form-control[readonly],
+.form-control {
+  text-align: center;
+  color: #ba8275;
+  background-color: #fff;
+  border-color: #ba8275;
+}
+
+.form-control[readonly] {
+  cursor: default;
+}
+
+.btn-outline-secondary {
+  color: #ba8275;
+  border-color: #ba8275;
+}
+.btn-outline-secondary:not(:disabled):not(.disabled).active,
+.btn-outline-secondary:not(:disabled):not(.disabled):active,
+.show > .btn-outline-secondary.dropdown-toggle,
+.btn-outline-secondary:hover {
+  color: #ececec;
+  border-color: #ba8275;
+  background: #ba8275;
+}
+.btn-outline-secondary:not(:disabled):not(.disabled).active:focus,
+.btn-outline-secondary:not(:disabled):not(.disabled):active:focus,
+.show > .btn-outline-secondary.dropdown-toggle:focus,
+.btn-outline-secondary:focus {
+  box-shadow: 0 0 0 0.2rem rgba(186, 130, 117, 0.5);
+}
+.form-control:focus {
+  color: #ba8275;
+  background-color: #fff;
+  border-color: #ba8275;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(186, 130, 117, 0);
+}
+/* .form-control:focus {
+  color: #ba8275;
+  background-color: #fff;
+  border-color: #ba8275;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(186, 130, 117, 0.25);
+} */
 /* ------------------ footer end ------------------ */
 
 @media (max-width: 900px) {

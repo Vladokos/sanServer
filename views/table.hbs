@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Document</title>
-  <link rel="stylesheet" href="../../css/reset.css">
-  <link rel="stylesheet" href="../../css/fonts.css">
-  <link rel="stylesheet" href="../../css/table.css">
+  <title>CandyShop</title>
+  <link rel="stylesheet" href="../css/reset.css">
+  <link rel="stylesheet" href="../css/fonts.css">
+  <link rel="stylesheet" href="../css/table.css">
 </head>
 
 <body>
@@ -16,6 +16,7 @@
       <h1>Панель администратора</h1>
       <div class="main__inner">
         <div class="main_output">
+          <a href="../../tablesName" class="form">Назад</a>
           <ul id="columns">
             {{#each columns as |column|}}
             <li>{{@key}}</li>
@@ -27,7 +28,7 @@
             {{#ifEquals column "Image"}}
             <li><img src="{{lookup dat (column)}}"></li>
             {{else}}
-            <li>{{lookup dat (column)}}</li>
+            <li style="word-break: break-all;">{{lookup dat (column)}}</li>
             {{/ifEquals }}
 
             {{/each}}

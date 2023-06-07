@@ -8,20 +8,22 @@ body {
   padding: 0 10px;
 }
 .main__inner {
+  margin-top: 20px;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   color: #ba8275;
 }
-
-.popup{
-  visibility: hidden;
+.main__inner li {
+  margin-top: 20px;
+}
+.popup {
+  display: none;
 }
 
-.popup.active{
-  visibility: visible;
-  
-
+.popup.active {
+  display: initial;
 
   z-index: 2;
 
@@ -40,7 +42,39 @@ body {
 }
 
 .popup__inner {
+  display: flex;
+  flex-direction: column;
+
   background-color: #fff;
   width: fit-content;
   margin: 0 auto;
+
+  border-radius: 5px;
+
+  padding: 20px;
 }
+
+.form {
+  margin-top: 50px;
+
+  border: none;
+  outline: none;
+  padding: 16px 20px;
+  background: #ba8275;
+  border-radius: 5px;
+  color: #ececec;
+  font-size: 18px;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+
+  text-decoration: inherit;
+
+  transition: 0.2s all linear;
+}
+
+.form:hover {
+  background: transparent;
+  color: #ba8275;
+}
+
+

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>CandyShop</title>
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/fonts.css">
     <link rel="stylesheet" href="../css/header.css">
@@ -18,12 +18,13 @@
     <main>
         <div class="container">
             <div class="main__inner">
+                <a class="open_popup-link" href="../../" style="text-decoration: none;">Назад</a>
                 {{#each sweet}}
                 <div class="goods">
                     <img src="{{this.Image}}" alt="" class="goods_image">
                     <span class="goods_title">{{this.Title}}</span>
                     <span>{{this.Description}}</span>
-                    <span class="goods_info">1кг = {{this.Cost}}₽</span>
+                    <span class="goods_info">{{this.heft}} = {{this.Cost}}₽</span>
                     <button class="open_popup-button" id="inCart" name="{{this.idSweet}}/{{this.Cost}}">В
                         корзину</button>
                 </div>
